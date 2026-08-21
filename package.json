@@ -1,0 +1,26 @@
+{
+  "name": "el-desvare",
+  "version": "1.0.0",
+  "description": "Plataforma de solicitud de cotizaciones - El Desvare Asesorías y Trabajos",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "multer": "^2.2.0",
+    "nodemailer": "^6.9.14",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

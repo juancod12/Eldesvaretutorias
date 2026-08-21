@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# Uploads (archivos de clientes)
+server/uploads/
+public/uploads/
+
+# Datos persistentes
+data/counter.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,592 @@
+============================================================
+  EL DESVARE — GUÍA COMPLETA DEL PROYECTO
+  Plataforma de Cotizaciones | Asesorías y Trabajos
+============================================================
+
+Fecha de creación: 16 de agosto de 2026
+Desarrollado con: Node.js + Express + HTML/CSS/JS Vanilla
+
+
+============================================================
+  1. QUÉ SE CONSTRUYÓ
+============================================================
+
+Se construyó la plataforma web completa de El Desvare,
+funcional y lista para usar. Incluye:
+
+  - Página de inicio con hero, sección "¿Cómo funciona?" y servicios
+  - Formulario de cotización en 5 pasos (multipaso)
+  - Selección de servicio con tarjetas interactivas
+  - Campos dinámicos según el tipo de servicio seleccionado
+  - Carga de archivos con arrastrar y soltar (drag & drop)
+  - Validaciones en el navegador Y en el servidor
+  - Generación de ID único (formato: ED-2026-000001)
+  - Envío automático de correo con todos los datos y archivos adjuntos
+  - Envío automático a WhatsApp mediante la API oficial de Meta
+  - Modo de prueba para WhatsApp (sin necesidad de credenciales)
+  - Protección con Helmet, rate limiting y honeypot anti-spam
+  - Diseño responsive que funciona en celular, tablet y computador
+  - Backend profesional con Node.js listo para producción
+
+
+============================================================
+  2. ESTRUCTURA DEL PROYECTO
+============================================================
+
+ElDesvare/
+│
+├── public/
+│   ├── index.html          → Página principal completa
+│   ├── css/
+│   │   └── styles.css      → Todos los estilos (mobile-first)
+│   ├── js/
+│   │   └── app.js          → Formulario multipaso + validaciones
+│   └── images/
+│       └── logo.png        → Logo de El Desvare
+│
+├── server/
+│   ├── server.js           → Servidor Express + seguridad
+│   ├── routes/
+│   │   └── requestRoutes.js
+│   ├── controllers/
+│   │   └── requestController.js
+│   ├── services/
+│   │   ├── emailService.js     → Envío de correos (Nodemailer)
+│   │   ├── whatsappService.js  → WhatsApp Cloud API + modo mock
+│   │   └── requestService.js   → Lógica principal
+│   ├── templates/
+│   │   ├── emailTemplate.js    → Diseño del correo HTML
+│   │   └── whatsappTemplate.js → Formato del mensaje de WhatsApp
+│   └── utils/
+│       ├── idGenerator.js      → Genera IDs tipo ED-2026-000001
+│       └── validators.js       → Validación y sanitización
+│
+├── data/
+│   └── counter.json        → Contador de IDs (se crea automático)
+│
+├── .env                    → TUS credenciales reales (NO subir a Git)
+├── .env.example            → Plantilla de variables
+├── .gitignore              → Archivos que Git ignora
+├── package.json            → Dependencias del proyecto
+├── README.md               → Documentación técnica completa
+└── GUIA_EL_DESVARE.txt    → Este archivo
+
+
+============================================================
+  3. REQUISITOS PREVIOS
+============================================================
+
+Antes de ejecutar el proyecto necesitas tener instalado:
+
+  - Node.js versión 18 o superior
+    Descarga en: https://nodejs.org
+
+  - npm (se instala automáticamente con Node.js)
+
+Para verificar que los tienes instalados, abre una terminal y escribe:
+
+    node --version
+    npm --version
+
+
+============================================================
+  4. CÓMO EJECUTAR EL PROYECTO (PRIMERA VEZ)
+============================================================
+
+Paso 1: Abre una terminal en la carpeta del proyecto.
+        (Puedes hacer clic derecho en la carpeta y elegir
+         "Abrir en Terminal" o "PowerShell aquí")
+
+Paso 2: Instala las dependencias:
+
+    npm install
+
+Paso 3: El archivo .env ya existe con valores de ejemplo.
+        Edítalo con tus credenciales reales (ver sección 5).
+
+Paso 4: Ejecuta el servidor en modo desarrollo:
+
+    npm run dev
+
+Paso 5: Abre el navegador en:
+
+    http://localhost:3000
+
+¡Listo! La plataforma está funcionando.
+
+
+============================================================
+  5. CONFIGURAR EL CORREO (GMAIL)
+============================================================
+
+Cuando un cliente envíe una solicitud, el sistema mandará
+un correo automático con todos los detalles. Para que funcione:
+
+PASO A: Activar contraseña de aplicación en Google
+
+  1. Ve a: https://myaccount.google.com
+  2. Entra a "Seguridad"
+  3. Activa "Verificación en 2 pasos" (si no la tienes)
+  4. Ve a: https://myaccount.google.com/apppasswords
+  5. Crea una contraseña de aplicación para "Correo"
+  6. Google te dará 16 caracteres (ejemplo: xxxx xxxx xxxx xxxx)
+  7. Copia esos 16 caracteres
+
+PASO B: Editar el archivo .env
+
+Abre el archivo .env y cambia estas líneas:
+
+    BUSINESS_EMAIL=tu_correo_real@gmail.com
+    SMTP_HOST=smtp.gmail.com
+    SMTP_PORT=587
+    SMTP_USER=tu_correo_real@gmail.com
+    SMTP_PASSWORD=xxxx xxxx xxxx xxxx
+
+  - BUSINESS_EMAIL: correo donde quieres recibir las solicitudes
+  - SMTP_USER: el correo de Gmail que envía
+  - SMTP_PASSWORD: los 16 caracteres que generaste en el paso A
+
+IMPORTANTE: La SMTP_PASSWORD NO es tu contraseña de Gmail.
+            Es la "contraseña de aplicación" de 16 caracteres.
+
+
+============================================================
+  6. CONFIGURAR WHATSAPP AUTOMÁTICO (META CLOUD API)
+============================================================
+
+Esta es la parte más importante. Para que el sistema envíe
+un WhatsApp automático al negocio cuando llegue una solicitud,
+necesitas configurar la API oficial de Meta.
+
+ACTUALMENTE el modo mock está activado (WHATSAPP_MOCK_MODE=true).
+Esto significa que el sistema simula el envío y muestra el
+mensaje en la consola, pero NO manda WhatsApp real.
+
+Para activar el WhatsApp real debes seguir estos pasos:
+
+----- PASO 1: Crear cuenta en Meta for Developers -----
+
+  1. Ve a: https://developers.facebook.com
+  2. Inicia sesión con tu cuenta de Facebook
+  3. Haz clic en "Mis apps" → "Crear app"
+  4. Selecciona tipo: "Empresa" o "Negocios"
+  5. Dale un nombre (ej. "El Desvare")
+
+----- PASO 2: Agregar WhatsApp a tu app -----
+
+  1. En el panel de tu app, busca y agrega el producto: "WhatsApp"
+  2. Selecciona o crea un Meta Business Account
+  3. Ve a: WhatsApp → Primeros pasos
+
+----- PASO 3: Obtener tus credenciales -----
+
+En la sección "Primeros pasos" encuentras:
+
+  - Token de acceso temporal (24 horas) → para pruebas
+  - Phone Number ID → el ID de tu número de WhatsApp
+  - Número de prueba de Meta → para probar sin aprobación
+
+----- PASO 4: Agregar número de prueba -----
+
+  1. En la misma sección, busca "Manage phone number list"
+  2. Agrega el número del negocio como número de prueba
+  3. Recibirás un código por WhatsApp para verificar
+
+----- PASO 5: Editar el archivo .env -----
+
+Cambia estas líneas en el archivo .env:
+
+    WHATSAPP_ACCESS_TOKEN=EAAxxxxxxxxxxxxxxx
+    WHATSAPP_PHONE_NUMBER_ID=123456789012345
+    WHATSAPP_BUSINESS_NUMBER=573001234567
+    WHATSAPP_API_VERSION=v21.0
+    WHATSAPP_MOCK_MODE=false
+
+  - WHATSAPP_ACCESS_TOKEN: el token que generaste en Meta
+  - WHATSAPP_PHONE_NUMBER_ID: el ID del número en Meta
+  - WHATSAPP_BUSINESS_NUMBER: tu número de WhatsApp con código de país
+    Ejemplo Colombia: 573001234567 (57 + número sin el 0 inicial)
+  - WHATSAPP_MOCK_MODE: cámbialo a false para activar el envío real
+
+----- PASO 6: Token permanente (para producción) -----
+
+El token temporal dura solo 24 horas. Para producción:
+
+  1. Ve a Meta Business Suite → Configuración del sistema
+  2. Crea un usuario del sistema (rol: administrador)
+  3. Asigna tu app de WhatsApp a ese usuario
+  4. Genera un token permanente con permisos:
+     - whatsapp_business_messaging
+     - whatsapp_business_management
+  5. Copia ese token en WHATSAPP_ACCESS_TOKEN
+
+----- PASO 7: Plantilla de mensaje (para producción) -----
+
+Meta exige una "plantilla aprobada" para mensajes
+enviados cuando el cliente no ha escrito primero.
+
+  1. En Meta Business Suite → WhatsApp Manager → Plantillas
+  2. Crear plantilla con estos datos:
+
+     Nombre: nueva_solicitud_cotizacion
+     Categoría: Utilidad (Utility)
+     Idioma: Español (es)
+
+     Texto del cuerpo:
+     ------------------------------
+     Nueva solicitud de cotización en El Desvare.
+
+     ID: {{1}}
+     Cliente: {{2}}
+     Servicio: {{3}}
+     Presupuesto: {{4}}
+
+     Revisa tu correo para ver todos los detalles y archivos adjuntos.
+     ------------------------------
+
+  3. Envía a revisión → Meta aprueba en 24-48 horas
+  4. Una vez aprobada, agrega en .env:
+
+     WHATSAPP_TEMPLATE_NAME=nueva_solicitud_cotizacion
+
+  5. El sistema usará la plantilla automáticamente
+
+
+============================================================
+  7. VARIABLES COMPLETAS DEL ARCHIVO .ENV
+============================================================
+
+Aquí está la explicación de cada variable:
+
+  PORT=3000
+    → Puerto donde corre el servidor (por defecto 3000)
+
+  BUSINESS_EMAIL=tu_correo@gmail.com
+    → Correo donde llegan las solicitudes de los clientes
+
+  SMTP_HOST=smtp.gmail.com
+    → Servidor de correo (para Gmail: smtp.gmail.com)
+
+  SMTP_PORT=587
+    → Puerto del servidor de correo (587 para Gmail)
+
+  SMTP_USER=tu_correo@gmail.com
+    → Correo que envía los mensajes (puede ser el mismo)
+
+  SMTP_PASSWORD=xxxx xxxx xxxx xxxx
+    → Contraseña de aplicación de Google (NO tu contraseña normal)
+
+  EMAIL_FROM_NAME=El Desvare
+    → Nombre que aparece en el correo enviado
+
+  WHATSAPP_ACCESS_TOKEN=
+    → Token de acceso de Meta for Developers
+
+  WHATSAPP_PHONE_NUMBER_ID=
+    → ID del número de WhatsApp en Meta
+
+  WHATSAPP_BUSINESS_NUMBER=57XXXXXXXXXX
+    → Tu número de WhatsApp con código de país (Colombia: 57...)
+
+  WHATSAPP_API_VERSION=v21.0
+    → Versión de la API de WhatsApp (dejar así)
+
+  WHATSAPP_TEMPLATE_NAME=nueva_solicitud_cotizacion
+    → Nombre de la plantilla aprobada en Meta
+
+  WHATSAPP_MOCK_MODE=true
+    → true = modo prueba (solo muestra en consola)
+    → false = envío real por WhatsApp
+
+  UPLOAD_MAX_SIZE=10485760
+    → Tamaño máximo de archivo en bytes (10485760 = 10MB)
+
+  BUSINESS_WHATSAPP=57XXXXXXXXXX
+    → Número del negocio para el botón "Contactar por WhatsApp"
+
+  SITE_URL=http://localhost:3000
+    → URL del sitio (cambiar por tu dominio en producción)
+
+
+============================================================
+  8. CAMBIAR EL NÚMERO DE WHATSAPP EN LOS BOTONES
+============================================================
+
+Para que los botones de WhatsApp de la página abran
+tu número real, debes cambiar dos cosas:
+
+  1. En el archivo .env:
+     BUSINESS_WHATSAPP=573001234567
+
+  2. En el archivo public/js/app.js (línea 10 aproximadamente):
+     businessWhatsapp: '573001234567'
+
+Recuerda incluir el código del país (Colombia = 57).
+Ejemplo: si tu número es 300 123 4567, escribe 573001234567
+
+
+============================================================
+  9. CÓMO EJECUTAR (COMANDOS)
+============================================================
+
+  npm install        → Instala las dependencias (solo la primera vez)
+  npm run dev        → Modo desarrollo (recarga automática al guardar)
+  npm start          → Modo producción (para el servidor real)
+
+
+============================================================
+  10. CÓMO DESPLEGARLO EN INTERNET (RENDER - RECOMENDADO)
+============================================================
+
+Render tiene un plan gratuito y es perfecto para este proyecto.
+
+PASO 1: Subir el código a GitHub
+
+  1. Crea una cuenta en: https://github.com
+  2. Crea un repositorio nuevo (privado o público)
+  3. Sube todos los archivos del proyecto
+     IMPORTANTE: NO subas el archivo .env (ya está en .gitignore)
+
+PASO 2: Crear el servidor en Render
+
+  1. Crea cuenta en: https://render.com
+  2. Haz clic en "New +" → "Web Service"
+  3. Conecta tu cuenta de GitHub y selecciona el repositorio
+  4. Configura el servicio:
+     - Build Command: npm install
+     - Start Command: npm start
+     - Environment: Node
+
+PASO 3: Agregar las variables de entorno
+
+  En Render, ve a "Environment" y agrega una por una
+  todas las variables que tienes en tu archivo .env.
+  Esto es importante para que el correo y WhatsApp funcionen.
+
+PASO 4: Desplegar
+
+  Render construirá y desplegará el proyecto automáticamente.
+  Te dará una URL del tipo: https://el-desvare.onrender.com
+
+PASO 5: Actualizar la URL en .env de producción
+
+  En Render, cambia la variable:
+  SITE_URL=https://el-desvare.onrender.com
+
+IMPORTANTE SOBRE LOS ARCHIVOS EN RENDER:
+  Render tiene un sistema de archivos temporal. Los archivos
+  que suban los clientes se perderán cada vez que Render
+  reinicie el servidor. Para una solución permanente,
+  deberías migrar a almacenamiento externo (ver sección 11).
+
+
+============================================================
+  11. OTRAS OPCIONES DE DESPLIEGUE
+============================================================
+
+RAILWAY (railway.app):
+  - Similar a Render, muy fácil de usar
+  - Plan gratuito disponible
+  - También tiene sistema de archivos temporal
+
+VPS (Servidor privado - Digital Ocean, Hetzner, Contabo):
+  - Más control total
+  - Los archivos SÍ son permanentes
+  - Requiere más configuración técnica
+  - Usar PM2 para mantener el servidor activo:
+    pm2 start npm -- start
+  - Configurar Nginx como reverse proxy para HTTPS
+
+CONTABO (el más económico):
+  - VPS desde ~$7 USD/mes
+  - Perfecto cuando el negocio crezca
+
+
+============================================================
+  12. ALMACENAMIENTO DE ARCHIVOS EN PRODUCCIÓN
+============================================================
+
+En desarrollo local, los archivos se guardan en:
+  server/uploads/
+
+Para producción en la nube (Render, Railway), los archivos
+desaparecen cuando el servidor se reinicia. Soluciones:
+
+  CLOUDINARY (recomendado para empezar):
+    - Plan gratuito generoso
+    - Fácil integración con Node.js
+    - Web: https://cloudinary.com
+
+  SUPABASE STORAGE:
+    - Open source, plan gratuito
+    - También incluye base de datos
+    - Web: https://supabase.com
+
+  AMAZON S3 / BACKBLAZE B2:
+    - Más económico a escala
+    - Más configuración inicial
+
+Para un VPS propio, no necesitas nada de esto.
+Los archivos simplemente se guardan en el servidor.
+
+
+============================================================
+  13. CAMBIAR EL LOGO
+============================================================
+
+Reemplaza el archivo:
+  public/images/logo.png
+
+Por tu logo (formato PNG, fondo transparente o claro,
+mínimo 200x200 píxeles, máximo recomendado 500x500).
+
+No necesitas cambiar nada más en el código.
+
+
+============================================================
+  14. CAMBIAR LOS COLORES
+============================================================
+
+Edita las variables al inicio del archivo:
+  public/css/styles.css
+
+Busca esta sección (primeras líneas):
+
+  :root {
+    --primary: #0B1F33;    ← Azul oscuro (color principal)
+    --accent: #F7B719;     ← Amarillo/dorado (color de acento)
+  }
+
+Cambia los valores hexadecimales por los colores que quieras.
+
+
+============================================================
+  15. SEGURIDAD IMPLEMENTADA
+============================================================
+
+El proyecto ya incluye las siguientes medidas de seguridad:
+
+  - Helmet: protege los headers HTTP
+  - Rate limiting: máximo 5 solicitudes por hora por IP
+    (evita que alguien llene el formulario spam)
+  - Honeypot: campo invisible anti-bots
+  - Validación de archivos: tipo MIME y extensión en el servidor
+  - Nombres seguros: los archivos se renombran con ID único
+  - Variables de entorno: ninguna credencial está en el código
+  - No se muestran errores internos al usuario
+  - El servidor no ejecuta archivos subidos
+
+
+============================================================
+  16. PROBLEMAS COMUNES Y SOLUCIONES
+============================================================
+
+PROBLEMA: El correo no llega
+  Solución:
+  - Verifica que SMTP_PASSWORD sea una "contraseña de aplicación"
+    (NO tu contraseña normal de Gmail)
+  - Activa la verificación en 2 pasos en Google primero
+  - Revisa la carpeta de spam
+  - Revisa los mensajes de error en la consola del servidor
+
+PROBLEMA: WhatsApp da error "Token expirado" (error 190)
+  Solución:
+  - El token temporal dura solo 24 horas
+  - Genera un nuevo token en Meta for Developers
+  - Para evitarlo: crea un token permanente con usuario del sistema
+
+PROBLEMA: WhatsApp da error "Template not found" (error 131030)
+  Solución:
+  - La plantilla no existe o aún no está aprobada
+  - Activa WHATSAPP_MOCK_MODE=true mientras esperas la aprobación
+  - Verifica que el nombre en WHATSAPP_TEMPLATE_NAME sea exacto
+
+PROBLEMA: WhatsApp da error "Not in test recipient list" (error 131047)
+  Solución:
+  - En desarrollo, Meta solo permite enviar a números de prueba
+  - Agrega tu número en: Meta → WhatsApp → Primeros pasos → Recipients
+
+PROBLEMA: Los archivos desaparecen en Render/Railway
+  Solución:
+  - Es normal: esos servicios tienen almacenamiento temporal
+  - Solución real: migrar a Cloudinary, Supabase Storage o usar VPS
+
+PROBLEMA: La página no carga (localhost:3000 no responde)
+  Solución:
+  - Verifica que el servidor esté corriendo (npm run dev)
+  - Verifica que el puerto 3000 no esté ocupado por otra aplicación
+  - Revisa los mensajes de error en la consola
+
+
+============================================================
+  17. PRÓXIMAS MEJORAS SUGERIDAS (VERSIÓN 2)
+============================================================
+
+Cuando quieras escalar el proyecto, puedes agregar:
+
+  - Panel /admin para ver todas las solicitudes recibidas
+  - Base de datos (PostgreSQL o Supabase) para historial
+  - Estados de solicitud (Nueva → En proceso → Terminada)
+  - Correo de respuesta al cliente cuando le contestes
+  - Almacenamiento de archivos en Cloudinary o Supabase
+  - CAPTCHA para formularios con mucho tráfico
+  - Estadísticas del negocio (cuántas solicitudes, de qué tipo)
+  - Sistema de login para el panel admin
+  - Notificaciones push al celular
+
+
+============================================================
+  18. CHECKLIST ANTES DE SALIR A PRODUCCIÓN
+============================================================
+
+  [ ] npm install ejecutado correctamente
+  [ ] .env editado con correo Gmail real
+  [ ] Contraseña de aplicación de Gmail configurada
+  [ ] Número de WhatsApp real en BUSINESS_WHATSAPP y app.js
+  [ ] WhatsApp Cloud API configurado en Meta for Developers
+  [ ] WHATSAPP_MOCK_MODE=false (cuando tengas todo listo)
+  [ ] Plantilla de WhatsApp creada y aprobada por Meta
+  [ ] Logo colocado en public/images/logo.png
+  [ ] Proyecto subido a GitHub (sin el archivo .env)
+  [ ] Desplegado en Render/Railway/VPS
+  [ ] Variables de entorno configuradas en el hosting
+  [ ] Probar el formulario completo desde el celular
+
+
+============================================================
+  19. TECNOLOGÍAS UTILIZADAS
+============================================================
+
+  Frontend:
+    - HTML5 semántico
+    - CSS3 con variables y diseño mobile-first
+    - JavaScript vanilla (sin frameworks)
+    - Fuente: Inter (Google Fonts)
+
+  Backend:
+    - Node.js 18+
+    - Express 4
+    - Multer 2.x (manejo de archivos)
+    - Nodemailer (envío de correos)
+    - Axios (llamadas a la API de WhatsApp)
+    - Helmet (seguridad HTTP)
+    - express-rate-limit (protección anti-spam)
+    - dotenv (variables de entorno)
+    - uuid (nombres únicos para archivos)
+
+
+============================================================
+  20. CONTACTO Y SOPORTE
+============================================================
+
+Este archivo fue generado junto con el proyecto completo.
+Para cualquier cambio, mejora o duda, puedes continuar
+trabajando con Claude Code en la misma carpeta del proyecto.
+
+El proyecto está preparado para crecer: base de datos,
+panel admin, historial de solicitudes y mucho más.
+
+============================================================
+  EL DESVARE — Asesorías y Trabajos
+  "Cuéntanos qué necesitas. Nosotros te ayudamos."
+============================================================

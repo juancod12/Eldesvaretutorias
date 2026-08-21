@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Desvare | Asesorías y Trabajos</title>
+  <meta name="description" content="Solicita una cotización para trabajos, proyectos, asesorías y diferentes servicios. Cuéntanos qué necesitas y recibe atención personalizada.">
+  <meta property="og:title" content="El Desvare | Asesorías y Trabajos">
+  <meta property="og:description" content="Cuéntanos qué necesitas. Nosotros nos encargamos del resto.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/images/logo.png">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="container header-inner">
+      <a href="#inicio" class="header-logo" aria-label="El Desvare — Inicio">
+        <img src="/images/logo.png" alt="Logo El Desvare" height="44">
+      </a>
+      <nav class="header-nav" aria-label="Navegación principal">
+        <a href="#inicio" class="nav-link">Inicio</a>
+        <a href="#como-funciona" class="nav-link">¿Cómo funciona?</a>
+        <a href="#cotizar" class="nav-link">Solicitar cotización</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#cotizar" class="btn btn-accent" style="padding:10px 22px;font-size:14px;">Cotizar ahora</a>
+        <button class="btn-menu" id="btn-menu" aria-label="Menú" aria-expanded="false" aria-controls="mobile-nav">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Menú móvil">
+    <a href="#inicio" class="nav-link" data-close-menu>Inicio</a>
+    <a href="#como-funciona" class="nav-link" data-close-menu>¿Cómo funciona?</a>
+    <a href="#cotizar" class="nav-link" data-close-menu>Solicitar cotización</a>
+    <a href="#cotizar" class="btn btn-accent" data-close-menu>Cotizar ahora</a>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="container hero-inner">
+        <div class="hero-content">
+          <div class="hero-badge">🎓 Asesorías y Trabajos</div>
+          <h1 class="hero-title" id="hero-title">
+            Cuéntanos<br>qué necesitas.<br><span>Nosotros te</span><br><span>ayudamos.</span>
+          </h1>
+          <p class="hero-subtitle">
+            Solicita una cotización para trabajos, proyectos, asesorías y diferentes tipos de servicios. Rápido, sencillo y sin complicaciones.
+          </p>
+          <div class="hero-actions">
+            <a href="#cotizar" class="btn btn-accent">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Solicitar cotización
+            </a>
+            <a href="#como-funciona" class="btn btn-outline" style="color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.25);">
+              ¿Cómo funciona?
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-logo-wrap">
+            <img src="/images/logo.png" alt="El Desvare">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="section" id="como-funciona" aria-labelledby="steps-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Proceso</span>
+          <h2 id="steps-title">¿Cómo funciona?</h2>
+          <p>Cuatro pasos y tu solicitud está en nuestras manos.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card reveal">
+            <div class="step-number">01</div>
+            <div class="step-icon">💬</div>
+            <h3>Cuéntanos qué necesitas</h3>
+            <p>Selecciona el tipo de servicio y describe tu solicitud con el mayor detalle posible.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-number">02</div>
+            <div class="step-icon">📎</div>
+            <h3>Adjunta tus archivos</h3>
+            <p>Sube las instrucciones, rúbricas, imágenes o cualquier archivo relacionado con tu trabajo.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-number">03</div>
+            <div class="step-icon">🔍</div>
+            <h3>Revisamos tu solicitud</h3>
+            <p>Analizamos lo que necesitas y preparamos una cotización personalizada para ti.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-number">04</div>
+            <div class="step-icon">✅</div>
+            <h3>Te contactamos</h3>
+            <p>Te enviamos la cotización y acordamos los detalles para comenzar tu trabajo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="section services-section" id="servicios" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Servicios</span>
+          <h2 id="services-title">¿Qué necesitas hoy?</h2>
+          <p>Trabajamos una amplia variedad de servicios académicos y de desarrollo.</p>
+        </div>
+        <div class="services-grid reveal">
+          <div class="service-item">
+            <span class="service-item-icon">📚</span>
+            <div class="service-item-text">
+              <h4>Trabajos académicos</h4>
+              <p>Tareas, ensayos, parciales, informes y más.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">📋</span>
+            <div class="service-item-text">
+              <h4>Proyectos</h4>
+              <p>Proyectos de grado, investigación o de curso.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">🎓</span>
+            <div class="service-item-text">
+              <h4>Asesorías</h4>
+              <p>Acompañamiento y refuerzo personalizado.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">🔬</span>
+            <div class="service-item-text">
+              <h4>Investigación</h4>
+              <p>Monografías, artículos y revisiones bibliográficas.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">💻</span>
+            <div class="service-item-text">
+              <h4>Programación</h4>
+              <p>Código, desarrollo y proyectos tecnológicos.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">📊</span>
+            <div class="service-item-text">
+              <h4>Presentaciones</h4>
+              <p>Diapositivas profesionales y material visual.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">🎨</span>
+            <div class="service-item-text">
+              <h4>Diseño</h4>
+              <p>Gráficos, infografías y material creativo.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">✏️</span>
+            <div class="service-item-text">
+              <h4>Talleres</h4>
+              <p>Ejercicios, talleres y actividades prácticas.</p>
+            </div>
+          </div>
+          <div class="service-item">
+            <span class="service-item-icon">💡</span>
+            <div class="service-item-text">
+              <h4>Otros</h4>
+              <p>¿Algo diferente? Cuéntanos tu idea.</p>
+            </div>
+          </div>
+        </div>
+        <p class="services-cta">
+          ¿No encuentras lo que buscas? <strong>Cuéntanos tu idea y revisamos cómo podemos ayudarte.</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- FORMULARIO MULTIPASO -->
+    <section class="form-section" id="cotizar" aria-labelledby="form-title">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Cotizar</span>
+          <h2 id="form-title">Solicita tu cotización</h2>
+          <p>Cuéntanos qué necesitas. Son solo 5 pasos y listo.</p>
+        </div>
+
+        <div class="form-wrapper" role="main" aria-live="polite">
+
+          <!-- Barra de progreso -->
+          <div class="progress-bar" role="progressbar" aria-label="Progreso del formulario" aria-valuenow="1" aria-valuemin="1" aria-valuemax="5">
+            <div class="progress-steps" id="progress-steps">
+              <div class="progress-track" id="progress-track"></div>
+              <div class="progress-step-item active" data-step="1">
+                <div class="ps-dot">1</div>
+                <div class="ps-label">Servicio</div>
+              </div>
+              <div class="progress-step-item" data-step="2">
+                <div class="ps-dot">2</div>
+                <div class="ps-label">Info</div>
+              </div>
+              <div class="progress-step-item" data-step="3">
+                <div class="ps-dot">3</div>
+                <div class="ps-label">Archivos</div>
+              </div>
+              <div class="progress-step-item" data-step="4">
+                <div class="ps-dot">4</div>
+                <div class="ps-label">Contacto</div>
+              </div>
+              <div class="progress-step-item" data-step="5">
+                <div class="ps-dot">5</div>
+                <div class="ps-label">Confirmar</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CUERPO DEL FORMULARIO -->
+          <div class="form-body">
+
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="website" id="honeypot" style="display:none;" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <!-- PASO 1: ¿Qué necesitas? -->
+            <div class="form-step active" id="step-1" role="tabpanel" aria-label="Paso 1: Tipo de servicio">
+              <h3 class="step-title">¿Qué necesitas?</h3>
+              <p class="step-desc">Selecciona el tipo de servicio que mejor describe lo que necesitas.</p>
+              <div class="service-cards-grid" role="group" aria-label="Tipo de servicio" id="service-cards">
+                <button type="button" class="service-card" data-service="academico" aria-pressed="false">
+                  <span class="sc-icon">📚</span>
+                  <span class="sc-title">Trabajo académico</span>
+                  <span class="sc-desc">Tareas, ensayos, informes y parciales.</span>
+                </button>
+                <button type="button" class="service-card" data-service="proyecto" aria-pressed="false">
+                  <span class="sc-icon">📋</span>
+                  <span class="sc-title">Proyecto</span>
+                  <span class="sc-desc">Proyectos de grado, investigativos o de curso.</span>
+                </button>
+                <button type="button" class="service-card" data-service="asesoria" aria-pressed="false">
+                  <span class="sc-icon">🎓</span>
+                  <span class="sc-title">Asesoría</span>
+                  <span class="sc-desc">Acompañamiento, explicación y refuerzo.</span>
+                </button>
+                <button type="button" class="service-card" data-service="taller" aria-pressed="false">
+                  <span class="sc-icon">✏️</span>
+                  <span class="sc-title">Taller / Ejercicios</span>
+                  <span class="sc-desc">Talleres, ejercicios y actividades prácticas.</span>
+                </button>
+                <button type="button" class="service-card" data-service="presentacion" aria-pressed="false">
+                  <span class="sc-icon">📊</span>
+                  <span class="sc-title">Presentación</span>
+                  <span class="sc-desc">Diapositivas y material para exposiciones.</span>
+                </button>
+                <button type="button" class="service-card" data-service="investigacion" aria-pressed="false">
+                  <span class="sc-icon">🔬</span>
+                  <span class="sc-title">Investigación</span>
+                  <span class="sc-desc">Monografías, artículos y bibliografía.</span>
+                </button>
+                <button type="button" class="service-card" data-service="programacion" aria-pressed="false">
+                  <span class="sc-icon">💻</span>
+                  <span class="sc-title">Programación</span>
+                  <span class="sc-desc">Código, proyectos y soluciones tecnológicas.</span>
+                </button>
+                <button type="button" class="service-card" data-service="diseno" aria-pressed="false">
+                  <span class="sc-icon">🎨</span>
+                  <span class="sc-title">Diseño</span>
+                  <span class="sc-desc">Gráficos, logos, infografías y visual.</span>
+                </button>
+                <button type="button" class="service-card" data-service="otro" aria-pressed="false">
+                  <span class="sc-icon">💡</span>
+                  <span class="sc-title">Otro</span>
+                  <span class="sc-desc">Cuéntanos tu idea y la revisamos.</span>
+                </button>
+              </div>
+              <div class="field-error" id="service-error">Debes seleccionar un tipo de servicio.</div>
+            </div>
+
+            <!-- PASO 2: Información -->
+            <div class="form-step" id="step-2" role="tabpanel" aria-label="Paso 2: Información del trabajo">
+              <h3 class="step-title">Información del trabajo</h3>
+              <p class="step-desc">Cuéntanos los detalles. Mientras más información nos des, mejor podremos ayudarte.</p>
+
+              <div class="form-row cols-2">
+                <div class="form-group">
+                  <label for="career">Carrera <span class="optional">(opcional)</span></label>
+                  <input type="text" id="career" name="career" placeholder="Ej. Ingeniería de Sistemas" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="subject">Materia <span class="optional">(opcional)</span></label>
+                  <input type="text" id="subject" name="subject" placeholder="Ej. Cálculo diferencial" autocomplete="off">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="topic">Tema <span class="optional">(opcional)</span></label>
+                <input type="text" id="topic" name="topic" placeholder="Ej. Integrales por sustitución" autocomplete="off">
+              </div>
+
+              <div class="form-group">
+                <label for="description">Descripción <span class="required" aria-hidden="true">*</span></label>
+                <textarea id="description" name="description" rows="5" placeholder="Cuéntanos detalladamente qué necesitas, qué te solicitaron y cualquier información que consideres importante." required aria-required="true"></textarea>
+                <div class="field-error" id="description-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="instructions">Instrucciones del profesor <span class="optional">(opcional)</span></label>
+                <textarea id="instructions" name="instructions" rows="3" placeholder="Puedes copiar aquí las instrucciones o indicaciones del trabajo."></textarea>
+              </div>
+
+              <!-- Campos dinámicos según servicio -->
+              <div class="dynamic-fields" id="fields-programacion">
+                <hr class="dynamic-divider">
+                <p class="step-desc" style="margin-bottom:16px;">Detalles de programación</p>
+                <div class="form-row cols-2">
+                  <div class="form-group">
+                    <label for="language">Lenguaje</label>
+                    <input type="text" id="language" name="language" placeholder="Ej. Python, Java, JavaScript">
+                  </div>
+                  <div class="form-group">
+                    <label for="technology">Tecnología / Framework</label>
+                    <input type="text" id="technology" name="technology" placeholder="Ej. React, Django, Spring">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="projectType">Tipo de proyecto</label>
+                  <input type="text" id="projectType" name="projectType" placeholder="Ej. API REST, app web, algoritmo">
+                </div>
+                <div class="form-group">
+                  <label for="technicalDescription">Descripción técnica adicional</label>
+                  <textarea id="technicalDescription" name="technicalDescription" rows="3" placeholder="Requisitos técnicos, base de datos, estructura esperada..."></textarea>
+                </div>
+              </div>
+
+              <div class="dynamic-fields" id="fields-asesoria">
+                <hr class="dynamic-divider">
+                <p class="step-desc" style="margin-bottom:16px;">Detalles de la asesoría</p>
+                <div class="form-row cols-2">
+                  <div class="form-group">
+                    <label for="level">Nivel</label>
+                    <div class="select-wrap">
+                      <select id="level" name="level">
+                        <option value="">Selecciona...</option>
+                        <option>Bachillerato</option>
+                        <option>Técnico / Tecnólogo</option>
+                        <option>Pregrado</option>
+                        <option>Posgrado</option>
+                        <option>Otro</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="modality">Modalidad</label>
+                    <div class="select-wrap">
+                      <select id="modality" name="modality">
+                        <option value="">Selecciona...</option>
+                        <option>Virtual (videollamada)</option>
+                        <option>Escrita / Chat</option>
+                        <option>Grabación</option>
+                        <option>Presencial</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="reinforce">¿Qué necesitas reforzar?</label>
+                  <textarea id="reinforce" name="reinforce" rows="3" placeholder="Describe los temas o conceptos donde necesitas apoyo."></textarea>
+                </div>
+              </div>
+
+              <div class="dynamic-fields" id="fields-diseno">
+                <hr class="dynamic-divider">
+                <p class="step-desc" style="margin-bottom:16px;">Detalles del diseño</p>
+                <div class="form-row cols-2">
+                  <div class="form-group">
+                    <label for="designType">Tipo de diseño</label>
+                    <input type="text" id="designType" name="designType" placeholder="Ej. Logo, infografía, banner">
+                  </div>
+                  <div class="form-group">
+                    <label for="format">Formato</label>
+                    <input type="text" id="format" name="format" placeholder="Ej. PNG, PDF, PPTX">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="dimensions">Dimensiones / Medidas</label>
+                  <input type="text" id="dimensions" name="dimensions" placeholder="Ej. 1920x1080px, A4, cuadrado">
+                </div>
+              </div>
+
+              <div class="dynamic-fields" id="fields-investigacion">
+                <hr class="dynamic-divider">
+                <p class="step-desc" style="margin-bottom:16px;">Detalles de la investigación</p>
+                <div class="form-row cols-2">
+                  <div class="form-group">
+                    <label for="researchType">Tipo de investigación</label>
+                    <input type="text" id="researchType" name="researchType" placeholder="Ej. Monografía, RAE, estado del arte">
+                  </div>
+                  <div class="form-group">
+                    <label for="numPages">Páginas aproximadas</label>
+                    <input type="number" id="numPages" name="numPages" placeholder="Ej. 15" min="1">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="requestedFormat">Formato solicitado</label>
+                  <input type="text" id="requestedFormat" name="requestedFormat" placeholder="Ej. APA 7, normas Icontec, IEEE">
+                </div>
+              </div>
+
+              <div class="dynamic-fields" id="fields-presentacion">
+                <hr class="dynamic-divider">
+                <p class="step-desc" style="margin-bottom:16px;">Detalles de la presentación</p>
+                <div class="form-row cols-2">
+                  <div class="form-group">
+                    <label for="numSlides">N.° de diapositivas</label>
+                    <input type="number" id="numSlides" name="numSlides" placeholder="Ej. 15" min="1">
+                  </div>
+                  <div class="form-group">
+                    <label for="formatPres">Formato</label>
+                    <div class="select-wrap">
+                      <select id="formatPres" name="format">
+                        <option value="">Selecciona...</option>
+                        <option>PowerPoint (.pptx)</option>
+                        <option>Google Slides</option>
+                        <option>PDF</option>
+                        <option>Canva</option>
+                        <option>Otro</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="dynamic-divider">
+
+              <div class="form-row cols-2">
+                <div class="form-group">
+                  <label for="deliveryDate">Fecha de entrega <span class="required" aria-hidden="true">*</span></label>
+                  <input type="date" id="deliveryDate" name="deliveryDate" required aria-required="true">
+                  <div class="field-error" id="deliveryDate-error"></div>
+                </div>
+                <div class="form-group">
+                  <label for="deliveryTime">Hora de entrega <span class="optional">(opcional)</span></label>
+                  <input type="time" id="deliveryTime" name="deliveryTime">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Nivel de urgencia</label>
+                <div class="radio-group" role="group" aria-label="Urgencia">
+                  <div class="radio-option">
+                    <input type="radio" name="urgency" id="urgency-normal" value="normal" checked>
+                    <label class="radio-label" for="urgency-normal">Normal</label>
+                  </div>
+                  <div class="radio-option">
+                    <input type="radio" name="urgency" id="urgency-prioritario" value="prioritario">
+                    <label class="radio-label" for="urgency-prioritario">Prioritario</label>
+                  </div>
+                  <div class="radio-option urgente">
+                    <input type="radio" name="urgency" id="urgency-urgente" value="urgente">
+                    <label class="radio-label" for="urgency-urgente">🔴 Urgente</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>¿Cuánto tienes pensado invertir?</label>
+                <div class="budget-grid" role="group" aria-label="Presupuesto">
+                  <div class="budget-option">
+                    <input type="radio" name="budget" id="budget-1" value="Menos de $30.000">
+                    <label class="budget-label" for="budget-1">Menos de $30.000</label>
+                  </div>
+                  <div class="budget-option">
+                    <input type="radio" name="budget" id="budget-2" value="$30.000 - $50.000">
+                    <label class="budget-label" for="budget-2">$30.000 - $50.000</label>
+                  </div>
+                  <div class="budget-option">
+                    <input type="radio" name="budget" id="budget-3" value="$50.000 - $80.000">
+                    <label class="budget-label" for="budget-3">$50.000 - $80.000</label>
+                  </div>
+                  <div class="budget-option">
+                    <input type="radio" name="budget" id="budget-4" value="$80.000 - $120.000">
+                    <label class="budget-label" for="budget-4">$80.000 - $120.000</label>
+                  </div>
+                  <div class="budget-option">
+                    <input type="radio" name="budget" id="budget-5" value="Más de $120.000">
+                    <label class="budget-label" for="budget-5">Más de $120.000</label>
+                  </div>
+                  <div class="budget-option">
+                    <input type="radio" name="budget" id="budget-6" value="No estoy seguro">
+                    <label class="budget-label" for="budget-6">No estoy seguro</label>
+                  </div>
+                </div>
+                <div style="margin-top:10px;">
+                  <input type="text" id="budgetOther" placeholder="O ingresa otro valor (ej. $35.000)" style="max-width:280px;">
+                </div>
+                <p style="font-size:12px;color:var(--text-light);margin-top:8px;">El presupuesto es solo una referencia. El precio final puede variar.</p>
+              </div>
+            </div>
+
+            <!-- PASO 3: Archivos -->
+            <div class="form-step" id="step-3" role="tabpanel" aria-label="Paso 3: Archivos">
+              <h3 class="step-title">¿Tienes archivos relacionados?</h3>
+              <p class="step-desc">Adjunta documentos, instrucciones, imágenes, rúbricas o cualquier archivo que nos ayude a entender tu solicitud. <strong>Este paso es opcional.</strong></p>
+
+              <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Zona de carga de archivos. Haz clic o arrastra archivos aquí.">
+                <div class="dropzone-icon">📁</div>
+                <div class="dropzone-title">Arrastra tus archivos aquí</div>
+                <div class="dropzone-desc">o <span style="color:var(--primary);font-weight:700;text-decoration:underline;">haz clic para seleccionarlos</span></div>
+                <div class="dropzone-types">PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG, ZIP — Máx. 10MB por archivo · 5 archivos</div>
+                <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip" aria-label="Seleccionar archivos">
+              </div>
+
+              <div class="file-list" id="file-list" aria-live="polite" aria-label="Archivos seleccionados"></div>
+              <div class="field-error" id="files-error"></div>
+              <p class="files-optional-note">Los archivos se adjuntarán al correo de confirmación del negocio.</p>
+            </div>
+
+            <!-- PASO 4: Contacto -->
+            <div class="form-step" id="step-4" role="tabpanel" aria-label="Paso 4: Datos de contacto">
+              <h3 class="step-title">Tus datos de contacto</h3>
+              <p class="step-desc">Usamos esta información únicamente para enviarte la cotización. Nada más.</p>
+
+              <div class="contact-note" role="note">
+                🔒 Usa un número y correo donde podamos contactarte fácilmente.
+              </div>
+
+              <div class="form-group">
+                <label for="clientName">Nombre completo <span class="required" aria-hidden="true">*</span></label>
+                <input type="text" id="clientName" name="clientName" placeholder="Tu nombre y apellido" required aria-required="true" autocomplete="name">
+                <div class="field-error" id="clientName-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="clientEmail">Correo electrónico <span class="required" aria-hidden="true">*</span></label>
+                <input type="email" id="clientEmail" name="clientEmail" placeholder="ejemplo@correo.com" required aria-required="true" autocomplete="email">
+                <div class="field-error" id="clientEmail-error"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="clientWhatsapp">Número de WhatsApp <span class="required" aria-hidden="true">*</span></label>
+                <input type="tel" id="clientWhatsapp" name="clientWhatsapp" placeholder="Ej. 3001234567" required aria-required="true" autocomplete="tel">
+                <p style="font-size:12px;color:var(--text-light);margin-top:5px;">Sin código de país. Solo dígitos. Ej: 3001234567</p>
+                <div class="field-error" id="clientWhatsapp-error"></div>
+              </div>
+
+              <div class="form-row cols-2">
+                <div class="form-group">
+                  <label for="clientInstagram">Instagram <span class="optional">(opcional)</span></label>
+                  <input type="text" id="clientInstagram" name="clientInstagram" placeholder="@tuusuario">
+                </div>
+                <div class="form-group">
+                  <label for="clientCity">Ciudad <span class="optional">(opcional)</span></label>
+                  <input type="text" id="clientCity" name="clientCity" placeholder="Ej. Bogotá">
+                </div>
+              </div>
+            </div>
+
+            <!-- PASO 5: Resumen -->
+            <div class="form-step" id="step-5" role="tabpanel" aria-label="Paso 5: Revisar y enviar">
+              <h3 class="step-title">Revisa tu solicitud</h3>
+              <p class="step-desc">Verifica que todo esté correcto antes de enviar.</p>
+              <div class="summary-grid" id="summary-content"></div>
+            </div>
+
+            <!-- CONFIRMACIÓN -->
+            <div class="confirmation" id="confirmation" role="alert" aria-live="assertive">
+              <div class="confirmation-icon">🎉</div>
+              <h3 class="confirmation-title">¡Solicitud enviada!</h3>
+              <p class="confirmation-sub">Recibimos tu solicitud. La revisaremos y nos pondremos en contacto contigo muy pronto.</p>
+              <div class="confirmation-id" id="confirmation-id">ED-2026-000001</div>
+              <div class="confirmation-actions">
+                <a href="/" class="btn btn-primary">Volver al inicio</a>
+                <a href="#" class="btn btn-outline" id="wa-contact-btn" target="_blank" rel="noopener noreferrer">
+                  💬 Contactar por WhatsApp
+                </a>
+              </div>
+            </div>
+
+          </div><!-- .form-body -->
+
+          <!-- NAVEGACIÓN -->
+          <div class="form-nav" id="form-nav">
+            <button type="button" class="btn btn-ghost" id="btn-prev" style="display:none;">← Anterior</button>
+            <span class="nav-spacer"></span>
+            <button type="button" class="btn btn-primary" id="btn-next">Siguiente →</button>
+            <button type="button" class="btn btn-accent" id="btn-submit" style="display:none;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Enviar solicitud
+            </button>
+          </div>
+
+        </div><!-- .form-wrapper -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="brand-slogan">El Desvare</div>
+          <div class="brand-name">Asesorías y Trabajos</div>
+          <p style="margin-top:12px;">¿Necesitas ayuda con un trabajo, proyecto o asesoría? Estamos aquí para ti.</p>
+          <a href="#" id="footer-wa-btn" class="btn btn-accent" style="margin-top:20px;display:inline-flex;" target="_blank" rel="noopener noreferrer">
+            💬 Escríbenos al WhatsApp
+          </a>
+        </div>
+        <div class="footer-links">
+          <h4>Navegación</h4>
+          <a href="#inicio">Inicio</a>
+          <a href="#como-funciona">¿Cómo funciona?</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#cotizar">Solicitar cotización</a>
+        </div>
+        <div class="footer-links">
+          <h4>Redes sociales</h4>
+          <!-- Configura tus redes aquí o en el JS (BUSINESS_INSTAGRAM) -->
+          <a href="#" id="footer-instagram">📸 Instagram</a>
+          <a href="#" id="footer-whatsapp">💬 WhatsApp</a>
+          <a href="#" id="footer-email">✉️ Correo</a>
+        </div>
+        <div class="footer-links">
+          <h4>Servicios</h4>
+          <a href="#cotizar">Trabajos académicos</a>
+          <a href="#cotizar">Programación</a>
+          <a href="#cotizar">Asesorías</a>
+          <a href="#cotizar">Diseño</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 El Desvare — Asesorías y Trabajos. Todos los derechos reservados.</p>
+        <p>Hecho con ❤️ para estudiantes colombianos.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp FAB -->
+  <a href="#" class="wa-fab" id="wa-fab" aria-label="Contactar por WhatsApp" target="_blank" rel="noopener noreferrer">💬</a>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
