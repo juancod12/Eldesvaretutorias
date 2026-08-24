@@ -6,9 +6,14 @@
 
 // ---- Configuración (cambia estos valores) ----
 const CONFIG = {
-  businessWhatsapp: '57XXXXXXXXXX', // Número del negocio con código de país
-  maxFileSize: 10 * 1024 * 1024,    // 10MB
+  businessWhatsapp: '573044168961', // Número del negocio con código de país
+  businessEmail: 'asesoriaseldesvare@gmail.com',
+  businessInstagram: 'https://www.instagram.com/asesoriaseldesvare/',
+  businessFacebook: 'https://www.facebook.com/profile.php?id=61593985401050',
+  maxFileSize: 18 * 1024 * 1024,    // 18MB por archivo (límite real: el total combinado)
+  maxTotalSize: 18 * 1024 * 1024,   // 18MB combinado — el correo (Gmail) es el único canal de envío
   maxFiles: 5,
+  cardSelectDelay: 350,              // ms de espera antes de avanzar al elegir servicio
 };
 
 const ALLOWED_EXTENSIONS = new Set([
@@ -53,6 +58,7 @@ const fileList = document.getElementById('file-list');
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+  initConsentGate();
   initHeader();
   initServiceCards();
   initFileUpload();
@@ -62,6 +68,65 @@ document.addEventListener('DOMContentLoaded', () => {
   updateProgress();
   setMinDeliveryDate();
 });
+
+// ============================================
+// CONSENTIMIENTO (términos, condiciones y devoluciones)
+// ============================================
+function initConsentGate() {
+  const gate = document.getElementById('consent-gate');
+  if (!gate) { initIntro(); return; } // páginas sin gate (ej. /terminos.html)
+
+  const acceptBtn = document.getElementById('consent-accept');
+  const rejectBtn = document.getElementById('consent-reject');
+
+  let alreadyAccepted = false;
+  try { alreadyAccepted = localStorage.getItem('consentAccepted') === '1'; } catch (e) { /* privacidad/incógnito: se ignora */ }
+
+  if (alreadyAccepted) {
+    gate.remove();
+    initIntro();
+    return;
+  }
+
+  document.body.classList.add('consent-locked');
+
+  acceptBtn?.addEventListener('click', () => {
+    try { localStorage.setItem('consentAccepted', '1'); } catch (e) { /* privacidad/incógnito: se ignora */ }
+    gate.classList.add('consent-hide');
+    document.body.classList.remove('consent-locked');
+    setTimeout(() => gate.remove(), 500);
+    initIntro();
+  });
+
+  rejectBtn?.addEventListener('click', () => {
+    window.location.href = 'https://google.com';
+  });
+}
+
+// ============================================
+// VIDEO DE BIENVENIDA (tarjeta del logo en el hero)
+// ============================================
+function initIntro() {
+  const video = document.getElementById('hero-intro-video');
+  const logo = document.getElementById('hero-intro-logo');
+  if (!video || !logo) return;
+
+  let finished = false;
+  function showLogo() {
+    if (finished) return;
+    finished = true;
+    // Al terminar, se reemplaza el último frame del video (el logo en relieve)
+    // por el logo real del sitio, y queda así de forma permanente.
+    video.classList.add('hero-video-hidden');
+    logo.classList.add('hero-logo-visible');
+  }
+
+  video.muted = true;
+  video.addEventListener('ended', showLogo);
+  video.addEventListener('error', showLogo);
+
+  video.play().catch(showLogo);
+}
 
 // ============================================
 // HEADER & MENÚ MÓVIL
@@ -144,6 +209,9 @@ function initServiceCards() {
 }
 
 function selectService(service) {
+  // Evita doble-avance si el usuario hace clic varias veces mientras transiciona
+  if (currentStep !== 1) return;
+
   selectedService = service;
   document.querySelectorAll('.service-card').forEach(card => {
     const isSelected = card.dataset.service === service;
@@ -151,6 +219,13 @@ function selectService(service) {
     card.setAttribute('aria-pressed', isSelected);
   });
   if (serviceError) serviceError.classList.remove('visible');
+
+  // La tarjeta actúa como activador: avanza automáticamente al paso 2
+  setTimeout(() => {
+    if (currentStep !== 1 || selectedService !== service) return;
+    showDynamicFields(selectedService);
+    goToStep(2);
+  }, CONFIG.cardSelectDelay);
 }
 
 function showDynamicFields(service) {
@@ -212,8 +287,10 @@ function goToStep(step) {
 function updateNavButtons() {
   if (!btnPrev || !btnNext || !btnSubmit) return;
 
+  // Paso 1: las tarjetas de servicio son el activador, no se muestra "Siguiente".
+  // El botón "Atrás" queda disponible desde el paso 2 por si el usuario se equivocó.
   btnPrev.style.display = currentStep > 1 ? 'inline-flex' : 'none';
-  btnNext.style.display = currentStep < TOTAL_STEPS ? 'inline-flex' : 'none';
+  btnNext.style.display = (currentStep > 1 && currentStep < TOTAL_STEPS) ? 'inline-flex' : 'none';
   btnSubmit.style.display = currentStep === TOTAL_STEPS ? 'inline-flex' : 'none';
 }
 
@@ -323,6 +400,10 @@ function initFileUpload() {
   });
 }
 
+function currentTotalSize() {
+  return uploadedFiles.reduce((sum, f) => sum + f.size, 0);
+}
+
 function handleFiles(newFiles) {
   const errEl = document.getElementById('files-error');
   if (errEl) errEl.classList.remove('visible');
@@ -334,7 +415,12 @@ function handleFiles(newFiles) {
     }
 
     if (file.size > CONFIG.maxFileSize) {
-      showFilesError(`"${file.name}" supera el tamaño máximo (10MB).`);
+      showFilesError(`"${file.name}" supera el tamaño máximo por archivo (${formatFileSize(CONFIG.maxFileSize)}).`);
+      continue;
+    }
+
+    if (currentTotalSize() + file.size > CONFIG.maxTotalSize) {
+      showFilesError(`No se pudo agregar "${file.name}": el total de archivos superaría el máximo permitido para enviarlos por correo (${formatFileSize(CONFIG.maxTotalSize)}).`);
       continue;
     }
 
@@ -365,6 +451,18 @@ function removeFile(index) {
 function renderFileList() {
   if (!fileList) return;
   fileList.innerHTML = '';
+
+  const totalEl = document.getElementById('file-total');
+  if (totalEl) {
+    if (uploadedFiles.length === 0) {
+      totalEl.textContent = '';
+      totalEl.classList.remove('warn');
+    } else {
+      const total = currentTotalSize();
+      totalEl.textContent = `Total: ${formatFileSize(total)} de ${formatFileSize(CONFIG.maxTotalSize)}`;
+      totalEl.classList.toggle('warn', total > CONFIG.maxTotalSize * 0.9);
+    }
+  }
 
   if (uploadedFiles.length === 0) return;
 
@@ -419,7 +517,6 @@ function buildSummary() {
       title: 'Descripción',
       rows: [
         ['Descripción', data.description ? data.description.slice(0, 200) + (data.description.length > 200 ? '...' : '') : '—'],
-        data.instructions && ['Instrucciones', data.instructions.slice(0, 100) + (data.instructions.length > 100 ? '...' : '')],
       ],
     },
     {
@@ -441,7 +538,6 @@ function buildSummary() {
         ['Nombre', data.clientName],
         ['Correo', data.clientEmail],
         ['WhatsApp', data.clientWhatsapp],
-        data.clientInstagram && ['Instagram', data.clientInstagram],
         data.clientCity && ['Ciudad', data.clientCity],
       ],
     },
@@ -488,7 +584,6 @@ function collectAllData() {
     subject: val('subject'),
     topic: val('topic'),
     description: val('description'),
-    instructions: val('instructions'),
     deliveryDate: val('deliveryDate'),
     deliveryTime: val('deliveryTime'),
     urgency: radioVal('urgency'),
@@ -512,7 +607,6 @@ function collectAllData() {
     clientName: val('clientName'),
     clientEmail: val('clientEmail'),
     clientWhatsapp: val('clientWhatsapp'),
-    clientInstagram: val('clientInstagram'),
     clientCity: val('clientCity'),
   };
 }
@@ -606,21 +700,33 @@ function showConfirmation(requestId) {
 }
 
 // ============================================
-// LINKS DE WHATSAPP
+// LINKS DE CONTACTO (WhatsApp, correo, Instagram)
 // ============================================
+function setHref(id, url) {
+  const el = document.getElementById(id);
+  if (el) el.href = url;
+}
+
 function setupWhatsAppLinks() {
   const wa = CONFIG.businessWhatsapp.replace(/\D/g, '');
-  if (!wa || wa.includes('X')) return; // sin configurar
+  if (wa && !wa.includes('X')) {
+    const waUrl = `https://wa.me/${wa}`;
+    setHref('wa-fab', waUrl);
+    setHref('footer-wa-btn', waUrl);
+    setHref('footer-whatsapp', waUrl);
+  }
 
-  const waUrl = `https://wa.me/${wa}`;
-  const setHref = (id, url) => {
-    const el = document.getElementById(id);
-    if (el) el.href = url;
-  };
+  if (CONFIG.businessEmail) {
+    setHref('footer-email', `mailto:${CONFIG.businessEmail}`);
+  }
 
-  setHref('wa-fab', waUrl);
-  setHref('footer-wa-btn', waUrl);
-  setHref('footer-whatsapp', waUrl);
+  if (CONFIG.businessInstagram) {
+    setHref('footer-instagram', CONFIG.businessInstagram);
+  }
+
+  if (CONFIG.businessFacebook) {
+    setHref('footer-facebook', CONFIG.businessFacebook);
+  }
 }
 
 // ============================================

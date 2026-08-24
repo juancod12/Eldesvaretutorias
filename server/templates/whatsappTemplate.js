@@ -20,7 +20,7 @@ function buildWhatsAppMessage(request) {
   const {
     requestId, service, career, subject, topic, description,
     deliveryDate, deliveryTime, urgency, budget,
-    clientName, clientWhatsapp, clientEmail, clientInstagram, clientCity,
+    clientName, clientWhatsapp, clientEmail, clientCity,
     filesCount,
   } = request;
 
@@ -41,7 +41,6 @@ function buildWhatsAppMessage(request) {
   message += `Nombre: ${clientName}\n`;
   message += `WhatsApp: ${clientWhatsapp}\n`;
   message += `Correo: ${clientEmail}\n`;
-  if (clientInstagram) message += `Instagram: ${clientInstagram}\n`;
   if (clientCity) message += `Ciudad: ${clientCity}\n`;
   message += `\n`;
 

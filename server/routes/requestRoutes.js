@@ -4,11 +4,9 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { validateFileExtension, validateFileMime } = require('../utils/validators');
 const { createRequest } = require('../controllers/requestController');
+const { MAX_FILE_SIZE, MAX_FILES } = require('../config/limits');
 
 const router = express.Router();
-
-const MAX_FILE_SIZE = parseInt(process.env.UPLOAD_MAX_SIZE, 10) || 10 * 1024 * 1024; // 10MB
-const MAX_FILES = 5;
 
 const UPLOADS_DIR = path.join(__dirname, '../uploads');
 

@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const { buildEmailHtml, buildEmailSubject } = require('../templates/emailTemplate');
+const { MAX_TOTAL_SIZE } = require('../config/limits');
 
 let transporter = null;
 
@@ -31,13 +32,13 @@ async function sendRequestEmail(request, files) {
   const html = buildEmailHtml(request, process.env.SITE_URL);
   const subject = buildEmailSubject(requestId);
 
-  // Adjuntar archivos al correo (hasta 15MB total)
+  // Adjuntar archivos al correo. El controlador ya valida el total contra
+  // MAX_TOTAL_SIZE antes de llegar aquí; esto es una segunda barrera de seguridad.
   const attachments = [];
   let totalSize = 0;
-  const sizeLimit = 15 * 1024 * 1024;
 
   for (const file of (files || [])) {
-    if (totalSize + file.size <= sizeLimit) {
+    if (totalSize + file.size <= MAX_TOTAL_SIZE) {
       attachments.push({
         filename: file.originalname,
         path: file.path,

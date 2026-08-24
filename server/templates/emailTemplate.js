@@ -30,14 +30,14 @@ function section(title, rows) {
 
 function buildEmailHtml(request, siteUrl) {
   const {
-    requestId, service, career, subject, topic, description, instructions,
+    requestId, service, career, subject, topic, description,
     deliveryDate, deliveryTime, urgency, budget,
     language, technology, projectType, technicalDescription,
     level, reinforce, modality,
     designType, format, dimensions,
     researchType, requestedFormat, numPages,
     numSlides,
-    clientName, clientEmail, clientWhatsapp, clientInstagram, clientCity,
+    clientName, clientEmail, clientWhatsapp, clientCity,
     filesCount,
   } = request;
 
@@ -91,7 +91,6 @@ function buildEmailHtml(request, siteUrl) {
         row('Nombre', clientName) +
         row('Correo', `<a href="mailto:${clientEmail}" style="color:#0B1F33;">${clientEmail}</a>`) +
         row('WhatsApp', `<a href="https://wa.me/${clientWhatsapp.replace(/\D/g,'')}" style="color:#0B1F33;">${clientWhatsapp}</a>`) +
-        row('Instagram', clientInstagram) +
         row('Ciudad', clientCity)
       )}
 
@@ -107,12 +106,6 @@ function buildEmailHtml(request, siteUrl) {
       <div style="margin-bottom:24px;">
         <div style="background:#0B1F33;color:#F7B719;padding:10px 16px;border-radius:8px 8px 0 0;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Descripción</div>
         <div style="background:#fff;border:1px solid #E5E7EB;border-top:none;border-radius:0 0 8px 8px;padding:16px;color:#0B1F33;font-size:14px;line-height:1.6;white-space:pre-wrap;">${description}</div>
-      </div>` : ''}
-
-      ${instructions ? `
-      <div style="margin-bottom:24px;">
-        <div style="background:#0B1F33;color:#F7B719;padding:10px 16px;border-radius:8px 8px 0 0;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Instrucciones del cliente</div>
-        <div style="background:#fff;border:1px solid #E5E7EB;border-top:none;border-radius:0 0 8px 8px;padding:16px;color:#0B1F33;font-size:14px;line-height:1.6;white-space:pre-wrap;">${instructions}</div>
       </div>` : ''}
 
       ${section('Entrega y urgencia',

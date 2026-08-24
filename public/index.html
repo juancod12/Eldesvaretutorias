@@ -16,11 +16,28 @@
 </head>
 <body>
 
+  <!-- CONSENTIMIENTO: términos, condiciones y política de devolución -->
+  <div id="consent-gate" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+    <div class="consent-card">
+      <img src="/images/logo.png" alt="El Desvare" class="consent-logo">
+      <h2 id="consent-title">Antes de continuar</h2>
+      <p>
+        Para usar este sitio y solicitar una cotización, debes aceptar nuestros
+        <a href="/terminos.html" target="_blank" rel="noopener noreferrer">Términos y Condiciones</a>
+        y nuestra <a href="/terminos.html#politica-devolucion" target="_blank" rel="noopener noreferrer">Política de devolución</a>.
+      </p>
+      <div class="consent-actions">
+        <button type="button" class="btn btn-ghost" id="consent-reject">Rechazar</button>
+        <button type="button" class="btn btn-accent" id="consent-accept">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="header" role="banner">
     <div class="container header-inner">
       <a href="#inicio" class="header-logo" aria-label="El Desvare — Inicio">
-        <img src="/images/logo.png" alt="Logo El Desvare" height="44">
+        <img src="/images/logo.png" alt="Logo El Desvare" height="84">
       </a>
       <nav class="header-nav" aria-label="Navegación principal">
         <a href="#inicio" class="nav-link">Inicio</a>
@@ -71,7 +88,10 @@
         </div>
         <div class="hero-visual">
           <div class="hero-logo-wrap">
-            <img src="/images/logo.png" alt="El Desvare">
+            <div class="hero-logo-media">
+              <video id="hero-intro-video" src="/videos/intro.mp4" muted playsinline preload="auto"></video>
+              <img id="hero-intro-logo" src="/images/logo.png" alt="El Desvare">
+            </div>
           </div>
         </div>
       </div>
@@ -237,10 +257,13 @@
             <!-- Honeypot anti-spam -->
             <input type="text" name="website" id="honeypot" style="display:none;" tabindex="-1" autocomplete="off" aria-hidden="true">
 
+            <!-- Leyenda de campos obligatorios -->
+            <p class="required-legend"><span class="required" aria-hidden="true">*</span> Campos obligatorios — el resto es opcional.</p>
+
             <!-- PASO 1: ¿Qué necesitas? -->
             <div class="form-step active" id="step-1" role="tabpanel" aria-label="Paso 1: Tipo de servicio">
               <h3 class="step-title">¿Qué necesitas?</h3>
-              <p class="step-desc">Selecciona el tipo de servicio que mejor describe lo que necesitas.</p>
+              <p class="step-desc">Selecciona el tipo de servicio que mejor describe lo que necesitas. Al elegir una tarjeta avanzarás automáticamente al siguiente paso.</p>
               <div class="service-cards-grid" role="group" aria-label="Tipo de servicio" id="service-cards">
                 <button type="button" class="service-card" data-service="academico" aria-pressed="false">
                   <span class="sc-icon">📚</span>
@@ -312,15 +335,10 @@
                 <input type="text" id="topic" name="topic" placeholder="Ej. Integrales por sustitución" autocomplete="off">
               </div>
 
-              <div class="form-group">
+              <div class="form-group required-field">
                 <label for="description">Descripción <span class="required" aria-hidden="true">*</span></label>
                 <textarea id="description" name="description" rows="5" placeholder="Cuéntanos detalladamente qué necesitas, qué te solicitaron y cualquier información que consideres importante." required aria-required="true"></textarea>
                 <div class="field-error" id="description-error"></div>
-              </div>
-
-              <div class="form-group">
-                <label for="instructions">Instrucciones del profesor <span class="optional">(opcional)</span></label>
-                <textarea id="instructions" name="instructions" rows="3" placeholder="Puedes copiar aquí las instrucciones o indicaciones del trabajo."></textarea>
               </div>
 
               <!-- Campos dinámicos según servicio -->
@@ -448,7 +466,7 @@
               <hr class="dynamic-divider">
 
               <div class="form-row cols-2">
-                <div class="form-group">
+                <div class="form-group required-field">
                   <label for="deliveryDate">Fecha de entrega <span class="required" aria-hidden="true">*</span></label>
                   <input type="date" id="deliveryDate" name="deliveryDate" required aria-required="true">
                   <div class="field-error" id="deliveryDate-error"></div>
@@ -521,13 +539,14 @@
                 <div class="dropzone-icon">📁</div>
                 <div class="dropzone-title">Arrastra tus archivos aquí</div>
                 <div class="dropzone-desc">o <span style="color:var(--primary);font-weight:700;text-decoration:underline;">haz clic para seleccionarlos</span></div>
-                <div class="dropzone-types">PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG, ZIP — Máx. 10MB por archivo · 5 archivos</div>
+                <div class="dropzone-types">PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG, ZIP — Máx. 18MB en total · 5 archivos</div>
                 <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip" aria-label="Seleccionar archivos">
               </div>
 
               <div class="file-list" id="file-list" aria-live="polite" aria-label="Archivos seleccionados"></div>
+              <div class="file-total" id="file-total"></div>
               <div class="field-error" id="files-error"></div>
-              <p class="files-optional-note">Los archivos se adjuntarán al correo de confirmación del negocio.</p>
+              <p class="files-optional-note">Los archivos se envían adjuntos al correo y se borran del servidor apenas se envía la solicitud.</p>
             </div>
 
             <!-- PASO 4: Contacto -->
@@ -539,34 +558,28 @@
                 🔒 Usa un número y correo donde podamos contactarte fácilmente.
               </div>
 
-              <div class="form-group">
+              <div class="form-group required-field">
                 <label for="clientName">Nombre completo <span class="required" aria-hidden="true">*</span></label>
                 <input type="text" id="clientName" name="clientName" placeholder="Tu nombre y apellido" required aria-required="true" autocomplete="name">
                 <div class="field-error" id="clientName-error"></div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group required-field">
                 <label for="clientEmail">Correo electrónico <span class="required" aria-hidden="true">*</span></label>
                 <input type="email" id="clientEmail" name="clientEmail" placeholder="ejemplo@correo.com" required aria-required="true" autocomplete="email">
                 <div class="field-error" id="clientEmail-error"></div>
               </div>
 
-              <div class="form-group">
+              <div class="form-group required-field">
                 <label for="clientWhatsapp">Número de WhatsApp <span class="required" aria-hidden="true">*</span></label>
                 <input type="tel" id="clientWhatsapp" name="clientWhatsapp" placeholder="Ej. 3001234567" required aria-required="true" autocomplete="tel">
                 <p style="font-size:12px;color:var(--text-light);margin-top:5px;">Sin código de país. Solo dígitos. Ej: 3001234567</p>
                 <div class="field-error" id="clientWhatsapp-error"></div>
               </div>
 
-              <div class="form-row cols-2">
-                <div class="form-group">
-                  <label for="clientInstagram">Instagram <span class="optional">(opcional)</span></label>
-                  <input type="text" id="clientInstagram" name="clientInstagram" placeholder="@tuusuario">
-                </div>
-                <div class="form-group">
-                  <label for="clientCity">Ciudad <span class="optional">(opcional)</span></label>
-                  <input type="text" id="clientCity" name="clientCity" placeholder="Ej. Bogotá">
-                </div>
+              <div class="form-group">
+                <label for="clientCity">Ciudad <span class="optional">(opcional)</span></label>
+                <input type="text" id="clientCity" name="clientCity" placeholder="Ej. Bogotá">
               </div>
             </div>
 
@@ -586,7 +599,11 @@
               <div class="confirmation-actions">
                 <a href="/" class="btn btn-primary">Volver al inicio</a>
                 <a href="#" class="btn btn-outline" id="wa-contact-btn" target="_blank" rel="noopener noreferrer">
-                  💬 Contactar por WhatsApp
+                  <svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor" aria-hidden="true" style="flex-shrink:0;">
+                    <path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.317.646 4.484 1.77 6.334L4 29l7.86-1.727A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.357l-.355-.21-4.665 1.025 1.006-4.545-.232-.37A9.7 9.7 0 0 1 5.25 15c0-5.93 4.824-10.75 10.754-10.75S26.75 9.07 26.75 15 21.934 24.75 16.004 24.75z"/>
+                    <path d="M21.62 17.66c-.303-.152-1.79-.883-2.067-.984-.278-.101-.48-.152-.682.152-.202.303-.782.984-.958 1.187-.176.202-.353.227-.656.076-.303-.152-1.278-.47-2.434-1.502-.9-.803-1.508-1.795-1.685-2.098-.176-.303-.019-.467.133-.618.136-.135.303-.353.454-.53.152-.176.202-.303.303-.505.101-.202.05-.379-.025-.53-.076-.152-.682-1.644-.934-2.252-.246-.591-.497-.512-.682-.521l-.582-.01c-.202 0-.53.076-.807.379-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.573.723.312 1.287.499 1.727.639.726.231 1.386.198 1.908.12.582-.087 1.79-.732 2.043-1.44.253-.708.253-1.314.177-1.44-.076-.126-.278-.202-.581-.354z"/>
+                  </svg>
+                  Contactar por WhatsApp
                 </a>
               </div>
             </div>
@@ -619,7 +636,11 @@
           <div class="brand-name">Asesorías y Trabajos</div>
           <p style="margin-top:12px;">¿Necesitas ayuda con un trabajo, proyecto o asesoría? Estamos aquí para ti.</p>
           <a href="#" id="footer-wa-btn" class="btn btn-accent" style="margin-top:20px;display:inline-flex;" target="_blank" rel="noopener noreferrer">
-            💬 Escríbenos al WhatsApp
+            <svg viewBox="0 0 32 32" width="16" height="16" fill="currentColor" aria-hidden="true" style="flex-shrink:0;">
+              <path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.317.646 4.484 1.77 6.334L4 29l7.86-1.727A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.357l-.355-.21-4.665 1.025 1.006-4.545-.232-.37A9.7 9.7 0 0 1 5.25 15c0-5.93 4.824-10.75 10.754-10.75S26.75 9.07 26.75 15 21.934 24.75 16.004 24.75z"/>
+              <path d="M21.62 17.66c-.303-.152-1.79-.883-2.067-.984-.278-.101-.48-.152-.682.152-.202.303-.782.984-.958 1.187-.176.202-.353.227-.656.076-.303-.152-1.278-.47-2.434-1.502-.9-.803-1.508-1.795-1.685-2.098-.176-.303-.019-.467.133-.618.136-.135.303-.353.454-.53.152-.176.202-.303.303-.505.101-.202.05-.379-.025-.53-.076-.152-.682-1.644-.934-2.252-.246-.591-.497-.512-.682-.521l-.582-.01c-.202 0-.53.076-.807.379-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.573.723.312 1.287.499 1.727.639.726.231 1.386.198 1.908.12.582-.087 1.79-.732 2.043-1.44.253-.708.253-1.314.177-1.44-.076-.126-.278-.202-.581-.354z"/>
+            </svg>
+            Escríbenos al WhatsApp
           </a>
         </div>
         <div class="footer-links">
@@ -631,9 +652,10 @@
         </div>
         <div class="footer-links">
           <h4>Redes sociales</h4>
-          <!-- Configura tus redes aquí o en el JS (BUSINESS_INSTAGRAM) -->
-          <a href="#" id="footer-instagram">📸 Instagram</a>
-          <a href="#" id="footer-whatsapp">💬 WhatsApp</a>
+          <!-- Los enlaces se vinculan automáticamente desde CONFIG en app.js -->
+          <a href="#" id="footer-facebook" target="_blank" rel="noopener noreferrer">📘 Facebook</a>
+          <a href="#" id="footer-instagram" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+          <a href="#" id="footer-whatsapp" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
           <a href="#" id="footer-email">✉️ Correo</a>
         </div>
         <div class="footer-links">
@@ -652,7 +674,12 @@
   </footer>
 
   <!-- WhatsApp FAB -->
-  <a href="#" class="wa-fab" id="wa-fab" aria-label="Contactar por WhatsApp" target="_blank" rel="noopener noreferrer">💬</a>
+  <a href="#" class="wa-fab" id="wa-fab" aria-label="Contactar por WhatsApp" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor" aria-hidden="true">
+      <path d="M16.004 3C9.376 3 4 8.373 4 15c0 2.317.646 4.484 1.77 6.334L4 29l7.86-1.727A11.94 11.94 0 0 0 16.004 27C22.63 27 28 21.627 28 15S22.63 3 16.004 3zm0 21.75a9.7 9.7 0 0 1-4.95-1.357l-.355-.21-4.665 1.025 1.006-4.545-.232-.37A9.7 9.7 0 0 1 5.25 15c0-5.93 4.824-10.75 10.754-10.75S26.75 9.07 26.75 15 21.934 24.75 16.004 24.75z"/>
+      <path d="M21.62 17.66c-.303-.152-1.79-.883-2.067-.984-.278-.101-.48-.152-.682.152-.202.303-.782.984-.958 1.187-.176.202-.353.227-.656.076-.303-.152-1.278-.47-2.434-1.502-.9-.803-1.508-1.795-1.685-2.098-.176-.303-.019-.467.133-.618.136-.135.303-.353.454-.53.152-.176.202-.303.303-.505.101-.202.05-.379-.025-.53-.076-.152-.682-1.644-.934-2.252-.246-.591-.497-.512-.682-.521l-.582-.01c-.202 0-.53.076-.807.379-.278.303-1.06 1.036-1.06 2.527s1.085 2.933 1.236 3.136c.152.202 2.135 3.26 5.174 4.573.723.312 1.287.499 1.727.639.726.231 1.386.198 1.908.12.582-.087 1.79-.732 2.043-1.44.253-.708.253-1.314.177-1.44-.076-.126-.278-.202-.581-.354z"/>
+    </svg>
+  </a>
 
   <script src="/js/app.js"></script>
 </body>

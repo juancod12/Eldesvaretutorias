@@ -10,6 +10,10 @@ const requestRoutes = require('./routes/requestRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Necesario en Render/Railway/Nginx: sin esto, express-rate-limit y req.ip
+// ven la IP del proxy en lugar de la del visitante real.
+app.set('trust proxy', 1);
+
 // Crear directorio de uploads si no existe
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });

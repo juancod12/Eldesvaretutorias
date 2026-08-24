@@ -88,7 +88,6 @@ function sanitizeRequestBody(body) {
     subject: sanitizeString(body.subject),
     topic: sanitizeString(body.topic),
     description: sanitizeString(body.description),
-    instructions: sanitizeString(body.instructions),
     deliveryDate: sanitizeString(body.deliveryDate),
     deliveryTime: sanitizeString(body.deliveryTime),
     urgency: sanitizeString(body.urgency),
@@ -112,7 +111,6 @@ function sanitizeRequestBody(body) {
     clientName: sanitizeString(body.clientName),
     clientEmail: sanitizeString(body.clientEmail),
     clientWhatsapp: sanitizeString(body.clientWhatsapp),
-    clientInstagram: sanitizeString(body.clientInstagram),
     clientCity: sanitizeString(body.clientCity),
   };
 }
