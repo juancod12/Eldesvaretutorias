@@ -36,19 +36,21 @@ const DYNAMIC_FIELDS = {
 };
 
 // ---- Ruleta de descuento (paso final antes de enviar) ----
-// Los premios menores se repiten más veces en el arreglo de segmentos y
-// además pesan más en la tabla de probabilidades: así el 35% (premio mayor)
-// es el resultado menos probable, sin dejar de ser alcanzable.
-const WHEEL_SEGMENTS = [5, 10, 5, 15, 10, 20, 5, 25, 10, 30, 5, 35];
+// Los premios menores (incluido "sin premio", 0%) se repiten más veces en el
+// arreglo de segmentos y además pesan más en la tabla de probabilidades: así
+// el 35% (premio mayor) es el resultado menos probable, sin dejar de ser
+// alcanzable. Varios segmentos son "perdedores" (0%), como en una ruleta real.
+const WHEEL_SEGMENTS = [0, 5, 10, 0, 15, 5, 20, 0, 25, 10, 30, 0, 5, 35];
 const SEGMENT_ANGLE = 360 / WHEEL_SEGMENTS.length;
 const DISCOUNT_WEIGHTS = [
-  { value: 5, weight: 38 },
-  { value: 10, weight: 25 },
-  { value: 15, weight: 15 },
-  { value: 20, weight: 10 },
-  { value: 25, weight: 6 },
-  { value: 30, weight: 4 },
-  { value: 35, weight: 2 },
+  { value: 0, weight: 30 },
+  { value: 5, weight: 25 },
+  { value: 10, weight: 18 },
+  { value: 15, weight: 12 },
+  { value: 20, weight: 8 },
+  { value: 25, weight: 4 },
+  { value: 30, weight: 2 },
+  { value: 35, weight: 1 },
 ];
 
 // ---- Estado ----
@@ -83,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFileUpload();
   initNavButtons();
   initWheel();
+  initWheelPopup();
   initScrollAnimations();
   setupWhatsAppLinks();
   updateProgress();
@@ -702,11 +705,55 @@ function spinWheel() {
     wheelSpun = true;
     selectedDiscount = discount;
     if (resultEl) {
-      resultEl.textContent = `🎉 ¡Ganaste ${discount}% de descuento!`;
+      resultEl.textContent = discount > 0
+        ? `🎉 ¡Ganaste ${discount}% de descuento!`
+        : '😅 Esta vez no hubo descuento, ¡pero tu solicitud sigue en pie!';
+      resultEl.classList.toggle('lose', discount === 0);
       resultEl.classList.add('visible');
     }
     updateNavButtons();
+    showWheelPopup(discount);
   }, { once: true });
+}
+
+function initWheelPopup() {
+  const popup = document.getElementById('wheel-popup');
+  const closeBtn = document.getElementById('wheel-popup-close');
+  if (closeBtn) closeBtn.addEventListener('click', hideWheelPopup);
+  if (popup) {
+    popup.addEventListener('click', e => {
+      if (e.target === popup) hideWheelPopup();
+    });
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') hideWheelPopup();
+  });
+}
+
+function showWheelPopup(discount) {
+  const popup = document.getElementById('wheel-popup');
+  if (!popup) return;
+
+  const won = discount > 0;
+  const icon = document.getElementById('wheel-popup-icon');
+  const title = document.getElementById('wheel-popup-title');
+  const value = document.getElementById('wheel-popup-value');
+  const sub = document.getElementById('wheel-popup-sub');
+
+  if (icon) icon.textContent = won ? '🎉' : '😅';
+  if (title) title.textContent = won ? '¡Ganaste!' : '¡Sigue participando!';
+  if (value) value.textContent = won ? `${discount}% OFF` : 'Sin descuento esta vez';
+  if (sub) sub.textContent = won
+    ? 'Tu descuento se incluirá en la solicitud.'
+    : 'No hay problema, tu solicitud sigue en pie igual.';
+
+  popup.classList.toggle('lose', !won);
+  popup.classList.add('visible');
+}
+
+function hideWheelPopup() {
+  const popup = document.getElementById('wheel-popup');
+  if (popup) popup.classList.remove('visible');
 }
 
 // ============================================
@@ -718,7 +765,9 @@ async function submitForm() {
     return;
   }
 
-  if (!wheelSpun || !selectedDiscount) {
+  // wheelSpun es la única señal confiable: selectedDiscount puede ser 0
+  // (segmento "perdedor"), que es un resultado válido, no "falta girar".
+  if (!wheelSpun) {
     goToStep(6);
     return;
   }

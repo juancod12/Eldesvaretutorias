@@ -23,7 +23,7 @@ const VALID_SERVICES = new Set([
 ]);
 
 // Únicos premios posibles de la ruleta de descuento (paso final del formulario).
-const VALID_DISCOUNTS = new Set([5, 10, 15, 20, 25, 30, 35]);
+const VALID_DISCOUNTS = new Set([0, 5, 10, 15, 20, 25, 30, 35]);
 
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
