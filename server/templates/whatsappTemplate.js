@@ -21,7 +21,7 @@ function buildWhatsAppMessage(request) {
     requestId, service, career, subject, topic, description,
     deliveryDate, deliveryTime, urgency, budget,
     clientName, clientWhatsapp, clientEmail, clientCity,
-    filesCount,
+    filesCount, discountPercent,
   } = request;
 
   const serviceLabel = SERVICE_LABELS[service] || service;
@@ -58,6 +58,11 @@ function buildWhatsAppMessage(request) {
 
   message += `💰 *PRESUPUESTO*\n`;
   message += `${budget || 'No especificado'}\n\n`;
+
+  if (discountPercent) {
+    message += `🎯 *DESCUENTO (RULETA)*\n`;
+    message += `${discountPercent}% OFF\n\n`;
+  }
 
   message += `📝 *DESCRIPCIÓN*\n`;
   const shortDesc = description && description.length > 200

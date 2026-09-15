@@ -35,11 +35,30 @@ const DYNAMIC_FIELDS = {
   presentacion: 'fields-presentacion',
 };
 
+// ---- Ruleta de descuento (paso final antes de enviar) ----
+// Los premios menores se repiten más veces en el arreglo de segmentos y
+// además pesan más en la tabla de probabilidades: así el 35% (premio mayor)
+// es el resultado menos probable, sin dejar de ser alcanzable.
+const WHEEL_SEGMENTS = [5, 10, 5, 15, 10, 20, 5, 25, 10, 30, 5, 35];
+const SEGMENT_ANGLE = 360 / WHEEL_SEGMENTS.length;
+const DISCOUNT_WEIGHTS = [
+  { value: 5, weight: 38 },
+  { value: 10, weight: 25 },
+  { value: 15, weight: 15 },
+  { value: 20, weight: 10 },
+  { value: 25, weight: 6 },
+  { value: 30, weight: 4 },
+  { value: 35, weight: 2 },
+];
+
 // ---- Estado ----
 let currentStep = 1;
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 let selectedService = null;
 let uploadedFiles = [];
+let selectedDiscount = null;
+let wheelSpun = false; // true solo cuando la animación terminó y el premio quedó fijo
+let wheelSpinning = false;
 
 // ---- DOM Referencias ----
 const formSteps = () => document.querySelectorAll('.form-step');
@@ -63,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initServiceCards();
   initFileUpload();
   initNavButtons();
+  initWheel();
   initScrollAnimations();
   setupWhatsAppLinks();
   updateProgress();
@@ -261,7 +281,7 @@ function nextStep() {
   if (!validateStep(currentStep)) return;
   if (currentStep < TOTAL_STEPS) {
     if (currentStep === 1) showDynamicFields(selectedService);
-    if (currentStep === TOTAL_STEPS - 1) buildSummary();
+    if (currentStep === 4) buildSummary(); // el resumen (paso 5) se arma justo antes de mostrarlo
     goToStep(currentStep + 1);
   }
 }
@@ -292,6 +312,7 @@ function updateNavButtons() {
   btnPrev.style.display = currentStep > 1 ? 'inline-flex' : 'none';
   btnNext.style.display = (currentStep > 1 && currentStep < TOTAL_STEPS) ? 'inline-flex' : 'none';
   btnSubmit.style.display = currentStep === TOTAL_STEPS ? 'inline-flex' : 'none';
+  btnSubmit.disabled = currentStep === TOTAL_STEPS && !wheelSpun;
 }
 
 // ============================================
@@ -608,7 +629,84 @@ function collectAllData() {
     clientEmail: val('clientEmail'),
     clientWhatsapp: val('clientWhatsapp'),
     clientCity: val('clientCity'),
+    // Ruleta de descuento
+    discountPercent: selectedDiscount || '',
   };
+}
+
+// ============================================
+// RULETA DE DESCUENTO (PASO 6 — último paso antes de enviar)
+// ============================================
+function initWheel() {
+  const wheelEl = document.getElementById('wheel');
+  const labelsEl = document.getElementById('wheel-labels');
+  const btnSpin = document.getElementById('btn-spin');
+  if (!wheelEl) return;
+
+  const colors = ['#0B1F33', '#F7B719'];
+  const stops = WHEEL_SEGMENTS.map((val, i) => {
+    const start = i * SEGMENT_ANGLE;
+    const end = start + SEGMENT_ANGLE;
+    return `${colors[i % 2]} ${start}deg ${end}deg`;
+  }).join(', ');
+  wheelEl.style.background = `conic-gradient(${stops})`;
+
+  if (labelsEl) {
+    labelsEl.innerHTML = WHEEL_SEGMENTS.map((val, i) => {
+      const angle = i * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+      return `<div class="wheel-label" style="transform: rotate(${angle}deg);"><span style="top:-102px;">${val}%</span></div>`;
+    }).join('');
+  }
+
+  if (btnSpin) btnSpin.addEventListener('click', spinWheel);
+}
+
+function pickWeightedDiscount() {
+  const total = DISCOUNT_WEIGHTS.reduce((sum, d) => sum + d.weight, 0);
+  let r = Math.random() * total;
+  for (const d of DISCOUNT_WEIGHTS) {
+    if (r < d.weight) return d.value;
+    r -= d.weight;
+  }
+  return DISCOUNT_WEIGHTS[0].value;
+}
+
+function spinWheel() {
+  if (wheelSpun || wheelSpinning) return;
+
+  const wheelEl = document.getElementById('wheel');
+  const btnSpin = document.getElementById('btn-spin');
+  const resultEl = document.getElementById('wheel-result');
+  if (!wheelEl) return;
+
+  wheelSpinning = true; // se bloquea de inmediato: la ruleta solo se gira una vez
+  if (btnSpin) btnSpin.disabled = true;
+
+  const discount = pickWeightedDiscount();
+
+  const matchingIndices = WHEEL_SEGMENTS.reduce((acc, v, i) => {
+    if (v === discount) acc.push(i);
+    return acc;
+  }, []);
+  const targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
+  const targetCenterAngle = targetIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+
+  const extraSpins = 5 + Math.floor(Math.random() * 3); // 5-7 vueltas completas
+  const finalRotation = extraSpins * 360 + (360 - targetCenterAngle);
+
+  wheelEl.style.transform = `rotate(${finalRotation}deg)`;
+
+  wheelEl.addEventListener('transitionend', function onEnd() {
+    wheelEl.removeEventListener('transitionend', onEnd);
+    wheelSpinning = false;
+    wheelSpun = true;
+    selectedDiscount = discount;
+    if (resultEl) {
+      resultEl.textContent = `🎉 ¡Ganaste ${discount}% de descuento!`;
+      resultEl.classList.add('visible');
+    }
+    updateNavButtons();
+  }, { once: true });
 }
 
 // ============================================
@@ -617,6 +715,11 @@ function collectAllData() {
 async function submitForm() {
   if (!validateStep(4)) {
     goToStep(4);
+    return;
+  }
+
+  if (!wheelSpun || !selectedDiscount) {
+    goToStep(6);
     return;
   }
 
@@ -685,6 +788,16 @@ function showConfirmation(requestId) {
 
   const idEl = document.getElementById('confirmation-id');
   if (idEl) idEl.textContent = requestId;
+
+  const discountEl = document.getElementById('confirmation-discount');
+  if (discountEl) {
+    if (selectedDiscount) {
+      discountEl.textContent = `🎯 Descuento ganado: ${selectedDiscount}% OFF`;
+      discountEl.classList.add('visible');
+    } else {
+      discountEl.classList.remove('visible');
+    }
+  }
 
   // Link WhatsApp de contacto directo
   const wa = CONFIG.businessWhatsapp.replace(/\D/g, '');

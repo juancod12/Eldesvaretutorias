@@ -22,6 +22,9 @@ const VALID_SERVICES = new Set([
   'presentacion', 'investigacion', 'programacion', 'diseno', 'otro',
 ]);
 
+// Únicos premios posibles de la ruleta de descuento (paso final del formulario).
+const VALID_DISCOUNTS = new Set([5, 10, 15, 20, 25, 30, 35]);
+
 function validateEmail(email) {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(String(email).toLowerCase());
@@ -81,6 +84,11 @@ function sanitizeString(str) {
   return str.trim().slice(0, 2000);
 }
 
+function sanitizeDiscount(value) {
+  const n = parseInt(value, 10);
+  return VALID_DISCOUNTS.has(n) ? n : '';
+}
+
 function sanitizeRequestBody(body) {
   return {
     service: sanitizeString(body.service),
@@ -112,6 +120,8 @@ function sanitizeRequestBody(body) {
     clientEmail: sanitizeString(body.clientEmail),
     clientWhatsapp: sanitizeString(body.clientWhatsapp),
     clientCity: sanitizeString(body.clientCity),
+    // Ruleta de descuento
+    discountPercent: sanitizeDiscount(body.discountPercent),
   };
 }
 

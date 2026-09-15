@@ -38,7 +38,7 @@ function buildEmailHtml(request, siteUrl) {
     researchType, requestedFormat, numPages,
     numSlides,
     clientName, clientEmail, clientWhatsapp, clientCity,
-    filesCount,
+    filesCount, discountPercent,
   } = request;
 
   const serviceLabel = SERVICE_LABELS[service] || service;
@@ -86,6 +86,13 @@ function buildEmailHtml(request, siteUrl) {
       <p style="color:#6B7280;font-size:14px;margin:0 0 24px;text-align:center;">
         Solicitud recibida el <strong style="color:#0B1F33;">${submittedAt}</strong>
       </p>
+
+      ${discountPercent ? `
+      <div style="text-align:center;margin:0 0 24px;">
+        <span style="display:inline-block;background:#ECFDF5;border:1px solid #10B981;color:#059669;font-weight:800;font-size:15px;padding:10px 20px;border-radius:50px;">
+          🎯 Descuento de la ruleta: ${discountPercent}% OFF
+        </span>
+      </div>` : ''}
 
       ${section('Cliente',
         row('Nombre', clientName) +
